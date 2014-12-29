@@ -1,0 +1,46 @@
+@(title: String, pageName: String, message: String)
+
+@base(title, pageName) {
+
+	<div id="blue">
+		<div class="container">
+			<div class="row centered">
+				<div class="col-lg-8 col-lg-offset-2">
+				<h4>ABOUT ME & ABOUT THIS PROJECT</h4>
+				<p>COOL PROJECT</p>
+				</div>
+			</div><!-- row -->
+		</div><!-- container -->
+	</div><!--  bluewrap -->
+
+
+	<div class="container w">
+		<div class="row centered">
+			<br><br>
+			<div class="col-lg-12">
+				<img class="img-circle" src="@routes.Assets.at("images/icon.jpeg")" width="110" height="110" alt="">
+				<h4>まる</h4>
+				<p>UTAU用音源開発の補助など担当。過去にWindows100%にて、Win100 UTAU教室という連載を持つ。</p>
+				<p><a href="https://twitter.com/maruloop">@@maruLoop</a></p>
+			</div><!-- col-lg-4 -->
+		</div><!-- row -->
+		<br>
+		<br>
+	</div><!-- container -->
+
+
+	<!-- PORTFOLIO SECTION -->
+	<div id="dg">
+		<div class="container">
+			<div class="row centered">
+				<h4>VoiceBank Activityとは</h4>
+				<p>UTAU音源の利用状況を確認できるWebサイトです。</p>
+				
+				<h4>VoiceBank Activityに登録するには</h4>
+				<p>登録したい音源ディレクトリ内にこのdllとplugin.txtを置き、UTAUから再生するだけです。<br />
+				character.txtに記載されている音源名で登録されます。</p>
+			</div><!-- row -->
+		</div><!-- container -->
+	</div><!-- DG -->
+	
+}

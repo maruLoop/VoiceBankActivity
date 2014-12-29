@@ -1,7 +1,46 @@
-@(message: String)
+@(title: String, pageName: String, message: String)
 
-@main("Welcome to Play") {
+@base(title, pageName) {
 
-    @play20.welcome(message)
+	<div id="headerwrap">
+		<div class="container">
+			<div class="row centered">
+				<div class="col-lg-8 col-lg-offset-2">
+				<h1>@message</h1>
+				</div>
+			</div><!-- row -->
+		</div><!-- container -->
+	</div><!-- headerwrap -->
 
+
+	<div class="container w">
+		<div class="row centered">
+			<br><br>
+			<div class="col-lg-6">
+				<i class="fa fa-line-chart"></i>
+				<h4>RECENT ACTIVITY</h4>
+				<p>最近の音源の使用状況</p>
+			</div><!-- col-lg-4 -->
+
+			<div class="col-lg-6">
+				<i class="fa fa-child"></i>
+				<h4>NEWCOMER</h4>
+				<p>最近新規登録された音源</p>
+			</div><!-- col-lg-4 -->
+		</div><!-- row -->
+		<br>
+		<br>
+	</div><!-- container -->
+
+	<div id="lg">
+		<div class="container">
+			<div class="row centered">
+				<h4>RECENT ACITIVY</h4>
+			</div><!-- row -->
+			<div class="row centered">
+				<h4>NEWCOMER</h4>
+			</div><!-- row -->
+		</div><!-- container -->
+	</div><!-- dg -->
+		
 }
