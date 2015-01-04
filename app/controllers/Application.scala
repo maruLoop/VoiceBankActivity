@@ -8,7 +8,6 @@ import play.api.libs.json.Json
 import play.api.libs.functional.syntax._
 import play.api.mvc._
 import utils.Validator._
-import java.net.URLDecoder
 import domain._
 import domain.JsonFormat._
 import domain.count.PlayCounter
@@ -98,12 +97,10 @@ class Application extends Controller{
         formWithErrors => BadRequest("Invalid Params"),
         form => {
           val (function, name, filename) = form
-          val nameUtf8 = URLDecoder.decode(name,"UTF-8")
-          val filenameUtf8 = URLDecoder.decode(filename,"UTF-8")
           try{
             val playcounter: PlayCounter = new PlayCounter()
-            val count: Int = playcounter.incrementPlayCount(nameUtf8, filenameUtf8)
-            Ok("%s %s %d".format(nameUtf8, filenameUtf8, count))
+            val count: Int = playcounter.incrementPlayCount(name, filename)
+            Ok("%s %s %d".format(name, filename, count))
           }catch{
             // TODO エラーハンドリングちゃんとやる
             case e: Throwable => InternalServerError("Internal Server Error")
