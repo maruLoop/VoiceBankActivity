@@ -23,7 +23,7 @@ class GetActivity {
   
   def getDetailActivity(id: Int): List[Activity] = 
     DB.withConnection (implicit connection  => {
-      getActivityDetails
+      getActivityDetails(id)
     })
   
   def getAllVoicebanks: List[Voicebank] =

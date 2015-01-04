@@ -62,7 +62,7 @@ object Dao {
       res.map(RecentActivity.tupled)
   }
   
-  def getActivityDetails(implicit connection: Connection): List[Activity] = {
+  def getActivityDetails(id: Int)(implicit connection: Connection): List[Activity] = {
             val res = SQL(
         """
           SELECT filename, count, timestamp FROM activity
@@ -72,8 +72,11 @@ object Dao {
             SELECT filename, MAX(timestamp) FROM activity
             GROUP BY filename
           )
+          AND id = {id}
           ORDER BY count DESC
         """
+      ).on(
+        'id -> id
       ).as( str("filename") ~ int("count") ~ date("timestamp") map(flatten) *)
       res.map(Activity.tupled)
   }
