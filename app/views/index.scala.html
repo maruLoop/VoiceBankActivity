@@ -20,27 +20,37 @@
 				<i class="fa fa-line-chart"></i>
 				<h4>RECENT ACTIVITY</h4>
 				<p>最近の音源の使用状況</p>
+				<div id="recent-activity"></div>
 			</div><!-- col-lg-4 -->
 
 			<div class="col-lg-6">
 				<i class="fa fa-child"></i>
 				<h4>NEWCOMER</h4>
-				<p>最近新規登録された音源</p>
+				<p>新規登録された音源</p>
+				<div id="newcomer"></div>
 			</div><!-- col-lg-4 -->
 		</div><!-- row -->
 		<br>
 		<br>
-	</div><!-- container -->
-
-	<div id="lg">
-		<div class="container">
-			<div class="row centered">
-				<h4>RECENT ACITIVY</h4>
-			</div><!-- row -->
-			<div class="row centered">
-				<h4>NEWCOMER</h4>
-			</div><!-- row -->
-		</div><!-- container -->
-	</div><!-- dg -->
-		
+	</div><!-- container -->		
+}{
+	<script id="recent-activity-tmpl" type="text/x-handlebars-template">
+	<table class="table table-striped table-condensed">
+		<tbody>
+			{{#each recentActivities}}
+				<tr><td><a href="/voicebank/{{id}}">{{name}}</a>が歌っています</td><td><small>{{timestamp}}</small></td></tr>
+			{{/each}}
+		</tbody>
+	</table>
+	</script>
+	<script id="newcomer-tmpl" type="text/x-handlebars-template">
+	<table class="table table-striped table-condensed">
+		<tbody>
+			{{#each newcomers}}
+				<tr><td><a href="/voicebank/{{id}}">{{name}}</a>が登録されました</td><td><small>{{timestamp}}</small></td></tr>
+			{{/each}}
+		</tbody>
+	</table>
+	</script>
+    <script type='text/javascript' src='@routes.Assets.at("javascripts/render-index.js")'></script>
 }
