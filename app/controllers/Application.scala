@@ -97,8 +97,8 @@ class Application extends Controller{
           val nameUtf8 = URLDecoder.decode(name,"UTF-8")
           val filenameUtf8 = URLDecoder.decode(filename,"UTF-8")
           try{
-            val count: Int = PlayCounter.incrementPlayCount(nameUtf8, filenameUtf8)
-            Ok("%s %s %d".format(nameUtf8, filenameUtf8, count))
+            PlayCounter.incrementPlayCount(nameUtf8, filenameUtf8)
+            Ok("%s %s %d".format(nameUtf8, filenameUtf8, GetActivity.getCount(nameUtf8, filenameUtf8)))
           }catch{
             // TODO エラーハンドリングちゃんとやる
             case e: Throwable => InternalServerError("Internal Server Error")

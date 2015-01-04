@@ -30,4 +30,9 @@ object GetActivity {
     DB.withConnection (implicit connection  => {
       getVoicebanks
     })
+    
+  def getCount(name: String, filename: String): Int =
+    DB.withConnection (implicit connection  => {
+      getCount(name, filename)
+    })
 }

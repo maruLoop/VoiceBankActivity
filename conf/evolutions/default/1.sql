@@ -2,13 +2,13 @@
 
 CREATE TABLE voicebank(
   id int AUTO_INCREMENT PRIMARY KEY,
-  name char(255) NOT NULL,
+  name char(255) UNIQUE,
   timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   index(id)
 ) engine=InnoDB;
 
 CREATE TABLE activity(
-  id int,
+  id int PRIMARY KEY,
   filename char(255) NOT NULL,
   count int default 1 NOT NULL,
   timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
