@@ -42,7 +42,7 @@ object Dao {
   def getRecentActivityWithLimit(limit: Int)(implicit connection: Connection): List[RecentActivity] = {
             val res = SQL(
         """
-          SELECT
+          SELECT DISTINCT
             activity.id, name, activity.timestamp
           FROM
             activity
@@ -65,7 +65,7 @@ object Dao {
   def getActivityDetails(id: Int)(implicit connection: Connection): List[Activity] = {
             val res = SQL(
         """
-          SELECT filename, count, timestamp FROM activity
+          SELECT DISTINCT filename, count, timestamp FROM activity
           WHERE
             (filename, timestamp) 
           IN(
