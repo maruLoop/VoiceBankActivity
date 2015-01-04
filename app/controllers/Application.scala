@@ -50,36 +50,32 @@ class Application extends Controller{
   }
   
   def getAllVoicebanks = Action {
-    val getActivity: GetActivity = new GetActivity
-    val voicebanks: List[Voicebank] = getActivity.getAllVoicebanks
+    val voicebanks: List[Voicebank] = GetActivity.getAllVoicebanks
     Ok(Json.toJson(
         voicebanks.map{vb => JsonVoicebankFormat(vb.id, vb.name, df.format(vb.timestamp))}
     ))
   }
   
   def getNewcomers = Action {
-    val getActivity: GetActivity = new GetActivity
-    val voicebanks: List[Voicebank] = getActivity.getNewcomers
+    val voicebanks: List[Voicebank] = GetActivity.getNewcomers
     Ok(Json.toJson(
         voicebanks.map{vb => JsonVoicebankFormat(vb.id, vb.name, df.format(vb.timestamp))}
     ))
   }
   
   def recentActivity = Action {
-    val getActivity: GetActivity = new GetActivity
-    val recentActivities: List[RecentActivity] = getActivity.getRecentActivity
+    val recentActivities: List[RecentActivity] = GetActivity.getRecentActivity
     Ok(Json.toJson(
         recentActivities.map{ac => JsonRecentActivityFormat(ac.id, ac.name, df.format(ac.timestamp))}
     ))
   }
   
   def voicebankJson(id: Int) = Action {
-    val getActivity: GetActivity = new GetActivity
-    val activities: List[Activity] = getActivity.getDetailActivity(id)
+    val activities: List[Activity] = GetActivity.getDetailActivity(id)
     Ok(Json.toJson(
         JsonVoicebankActivityFormat(
             id,
-            getActivity.getName(id),
+            GetActivity.getName(id),
             activities.map{ac => JsonActivityFormat(ac.filename, ac.count, df.format(ac.timestamp))}
         )
     ))
@@ -101,8 +97,7 @@ class Application extends Controller{
           val nameUtf8 = URLDecoder.decode(name,"UTF-8")
           val filenameUtf8 = URLDecoder.decode(filename,"UTF-8")
           try{
-            val playcounter: PlayCounter = new PlayCounter()
-            val count: Int = playcounter.incrementPlayCount(nameUtf8, filenameUtf8)
+            val count: Int = PlayCounter.incrementPlayCount(nameUtf8, filenameUtf8)
             Ok("%s %s %d".format(nameUtf8, filenameUtf8, count))
           }catch{
             // TODO エラーハンドリングちゃんとやる

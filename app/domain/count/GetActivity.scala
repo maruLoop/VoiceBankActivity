@@ -5,7 +5,7 @@ import play.api.db._
 import play.api.Play.current
 import domain._
 
-class GetActivity {
+object GetActivity {
   def getName(id: Int): String =
     DB.withConnection (implicit connection  => {
       getVoicebankName(id)

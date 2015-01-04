@@ -4,7 +4,7 @@ import domain.Dao._
 import play.api.db._
 import play.api.Play.current
 
-class PlayCounter {
+object PlayCounter {
   def  incrementPlayCount(name: String, filename: String): Int =
     DB.withTransaction (implicit connection  => {
       if(!isExistVoiceBank(name)){
