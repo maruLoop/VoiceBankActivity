@@ -8,11 +8,11 @@ CREATE TABLE voicebank(
 ) engine=InnoDB;
 
 CREATE TABLE activity(
-  id int PRIMARY KEY,
-  filename char(255) NOT NULL,
+  id int,
+  filename char(255),
   count int default 1 NOT NULL,
   timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  index(id),
+   PRIMARY KEY (id, filename),
   foreign key(id) references voicebank(id)
 ) engine=InnoDB;
 
