@@ -33,6 +33,6 @@ object GetActivity {
     
   def getCount(name: String, filename: String): Int =
     DB.withConnection (implicit connection  => {
-      getCount(name, filename)
+      Dao.getCount(name, filename)
     })
 }

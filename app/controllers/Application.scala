@@ -98,6 +98,7 @@ class Application extends Controller{
           val filenameUtf8 = URLDecoder.decode(filename,"UTF-8")
           try{
             PlayCounter.incrementPlayCount(nameUtf8, filenameUtf8)
+//            Ok("")
             Ok("%s %s %d".format(nameUtf8, filenameUtf8, GetActivity.getCount(nameUtf8, filenameUtf8)))
           }catch{
             // TODO エラーハンドリングちゃんとやる
