@@ -59,7 +59,7 @@ object Dao {
     val sortForColmun: String = convertSortToTableCulmun(sort)
             val res = SQL(
         """
-          SELECT voicebank.id, voicebank.name, voicebank.timestamp, activity.timestamp
+          SELECT DISTINCT voicebank.id, voicebank.name, voicebank.timestamp, activity.timestamp
           FROM voicebank
           INNER JOIN activity ON voicebank.id = activity.id 
           WHERE
