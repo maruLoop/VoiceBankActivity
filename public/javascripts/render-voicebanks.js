@@ -39,6 +39,7 @@ var showVoicebanks = function(page){
 		
 		template = Handlebars.compile($('#all-voicebanks-tmpl').html());
 	    $('#voicebanks').html(template(values));
+	    console.log(page + "  " values.pageNow);
 	    if(page != data.pageNow){
 		    history.pushState("","","/voicebanks?page="+page);
 	    }
