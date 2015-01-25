@@ -4,6 +4,18 @@ $(function () {
     });
     
     renderVoicebanks(json);
+    
+    $('.page-button').on('click', function(){
+    	showVoicebanks($(this).data('page'));
+    });
+    
+    $pageSize.on('change', function(){
+    	showVoicebanks(0);
+    });
+    
+    $sortOrder.on('change', function(){
+    	showVoicebanks(0);
+    });
 });
 
 var renderVoicebanks = function(values){
@@ -61,6 +73,6 @@ var showVoicebanks = function(pageNum){
 	    
 	    $sortOrder.on('change', function(){
 	    	showVoicebanks(0);
-	    })
+	    });
 	});
 }
