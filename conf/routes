@@ -5,7 +5,7 @@
 # Home page
 GET     /                           controllers.Application.index
 GET     /about                      controllers.Application.about
-GET     /voicebanks                 controllers.Application.voicebanks
+GET     /voicebanks                 controllers.Application.voicebanks(page: Int ?= 0)
 GET     /voicebank/:id              controllers.Application.voicebank(id: Int)
 
 POST    /playCount                  controllers.Application.playCount

@@ -42,7 +42,7 @@ class Application extends Controller{
   /**
    * show VOICE BANKS page
    */
-  def voicebanks = Action {
+  def voicebanks(page: Int) = Action {
     Ok(views.html.voicebanks("VoiceBank Activity", "VOICE BANKS", "CHECK the ACTIVITIES"))
   }
     

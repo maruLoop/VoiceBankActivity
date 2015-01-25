@@ -14,7 +14,10 @@ var showVoicebanks = function(page){
 	    	pageSize: $pageSize.val(),
 	    	sortCode: $sortOrder.find(':selected').data('sort'),
 	    	orderCode: $sortOrder.find(':selected').data('order')
-	    	}
+	    	},
+	    beforeSend: function(){
+			            $('#voicebanks').html($("img").attr("src","../images/ajax-loader.gif"));
+		            }
 	}).done(function(data){
 		var values = data;
 		page = data.pageNow; // Global
