@@ -56,9 +56,9 @@ var showVoicebanks = function(pageNum){
 	}).done(function(data){
 		renderVoicebanks(data);
 		
-	    if(page != values.pageNow){
-		    history.pushState("","","/voicebanks?page="+values.pageNow);
-			page = values.pageNow; // Global
+	    if(page != data.pageNow){
+		    history.pushState("","","/voicebanks?page="+data.pageNow);
+			page = data.pageNow; // Global
 	    }
 	}).fail(function(e){
 	    console.log('error!!!');
