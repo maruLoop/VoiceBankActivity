@@ -50,11 +50,11 @@ var showVoicebanks = function(page){
 	    });
 	    
 	    $pageSize.on('change', function(){
-	    	showVoicebanks(page);
+	    	showVoicebanks(0);
 	    });
 	    
 	    $sortOrder.on('change', function(){
-	    	showVoicebanks(page);
+	    	showVoicebanks(0);
 	    })
 	});
 }
