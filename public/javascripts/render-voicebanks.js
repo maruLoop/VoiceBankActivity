@@ -40,10 +40,9 @@ var showVoicebanks = function(pageNum){
 			            $('#voicebanks').html($("img").attr("src","../images/ajax-loader.gif"));
 		            }
 	}).done(function(data){
-		renderVoicebanks(data);
-		
-		history.pushState("","","/voicebanks?page="+data.pageNow);
 		page = data.pageNow; // Global
+		renderVoicebanks(data);
+		history.pushState("","","/voicebanks?page="+data.pageNow);
 	}).fail(function(e){
 	    console.log('error!!!');
 	    console.log(e);
