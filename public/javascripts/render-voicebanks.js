@@ -19,6 +19,9 @@ var showVoicebanks = function(page){
 			            $('#voicebanks').html($("img").attr("src","../images/ajax-loader.gif"));
 		            }
 	}).done(function(data){
+	    if(page != data.pageNow){
+		    history.pushState("","","/voicebanks?page="+page);
+	    }
 		var values = data;
 		page = data.pageNow; // Global
 		
@@ -40,9 +43,6 @@ var showVoicebanks = function(page){
 		
 		template = Handlebars.compile($('#all-voicebanks-tmpl').html());
 	    $('#voicebanks').html(template(values));
-	    if(page != 0){
-		    history.pushState("","","/voicebanks?page="+page);
-	    }
 	}).fail(function(e){
 	    console.log('error!!!');
 	    console.log(e);
