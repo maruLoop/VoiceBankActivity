@@ -19,11 +19,7 @@ var showVoicebanks = function(page){
 			            $('#voicebanks').html($("img").attr("src","../images/ajax-loader.gif"));
 		            }
 	}).done(function(data){
-	    if(page != data.pageNow){
-		    history.pushState("","","/voicebanks?page="+page);
-	    }
 		var values = data;
-		page = data.pageNow; // Global
 		
 		var pagesCount = Math.ceil(values.voicebanksCount / $pageSize.val());
 		var pagesCountArray = new Array();
@@ -34,15 +30,19 @@ var showVoicebanks = function(page){
 			}
 		}
 		values.pagesCount = pagesCountArray;
-		if(page-1>=0){
-			values.prev = { exist: true, page: page-1 };
+		if(values.pageNow-1>=0){
+			values.prev = { exist: true, page: values.pageNow-1 };
 		}
-		if(page+1<pagesCount){
-			values.next ={ exist: true, page: page+1 }; 
+		if(values.pageNow+1<pagesCount){
+			values.next ={ exist: true, page: values.pageNow+1 }; 
 		}
 		
 		template = Handlebars.compile($('#all-voicebanks-tmpl').html());
 	    $('#voicebanks').html(template(values));
+	    if(page != data.pageNow){
+		    history.pushState("","","/voicebanks?page="+page);
+	    }
+		page = data.pageNow; // Global
 	}).fail(function(e){
 	    console.log('error!!!');
 	    console.log(e);
