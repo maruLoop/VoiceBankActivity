@@ -6,16 +6,35 @@ import anorm.SqlParser._
 import anorm.Column._
 import java.sql.Connection
 import anorm.NamedParameter.symbol
+import domain.entity._
 
 object Dao {
   
-  def getVoicebanks(implicit connection: Connection):List[Voicebank] = {
-            val res = SQL(
+//  def getVoicebanks(implicit connection: Connection):List[Voicebank] = {
+//            val res = SQL(
+//        """
+//          SELECT * FROM voicebank ORDER BY id {order}
+//        """
+//      ).as(
+//          int("id") ~ str("name") ~ date("timestamp") map(flatten) *)
+//      res.map(Voicebank.tupled)
+//  }
+  
+  private def convertSortToTableCulmun(sort: Sort): String = {
+    sort match{
+      case Sort.REGIST_TIME => "voicebank.timestamp"
+      case Sort.UPDATE_TIME => "activity.timestamp"
+    }
+  }
+  
+  def getVoicebankId(name: String)(implicit connection: Connection): Int = {
+        SQL(
         """
-          SELECT * FROM voicebank ORDER BY id DESC
+          SELECT id FROM voicebank WHERE name = {name}
         """
-      ).as( int("id") ~ str("name") ~ date("timestamp") map(flatten) *)
-      res.map(Voicebank.tupled)
+      ).on(
+        'name -> name
+      ).as( scalar[Int].single )
   }
   
   def getVoicebankName(id: Int)(implicit connection: Connection): String = {
@@ -28,14 +47,32 @@ object Dao {
       ).as( scalar[String].single )
   }
   
-  def getVoicebanksWithLimit(limit: Int)(implicit connection: Connection):List[Voicebank] = {
+  def getVoicebanksCount(implicit connection: Connection): Int = {
+        SQL(
+        """
+          SELECT COUNT(id) FROM voicebank
+        """
+      ).as( scalar[Int].single )
+  }
+  
+  def getVoicebanksWithLimit(name: String, limit: Int, offset: Int, sort: Sort, order: Order)(implicit connection: Connection):List[Voicebank] = {
+    val sortForColmun: String = convertSortToTableCulmun(sort)
             val res = SQL(
         """
-          SELECT * FROM voicebank ORDER BY id DESC LIMIT {limit}
-        """
+          SELECT voicebank.id, voicebank.name, voicebank.timestamp, activity.timestamp
+          FROM voicebank
+          INNER JOIN activity ON voicebank.id = activity.id 
+          WHERE
+            (activity.id, activity.timestamp) 
+          IN(SELECT activity.id, MAX(activity.timestamp) FROM activity
+            GROUP BY activity.id
+          )
+          ORDER BY %s %s LIMIT {limit} OFFSET {offset}
+        """.format(sortForColmun ,order.toString())
       ).on(
-        'limit -> limit
-      ).as( int("id") ~ str("name") ~ date("timestamp") map(flatten) *)
+        'limit -> limit,
+        'offset -> offset
+      ).as( int("id") ~ str("name") ~ date("voicebank.timestamp") ~ date("activity.timestamp") map(flatten) *)
       res.map(Voicebank.tupled)
   }
   
@@ -49,8 +86,7 @@ object Dao {
           INNER JOIN voicebank ON voicebank.id = activity.id 
           WHERE
             (activity.id, activity.timestamp) 
-          IN(
-            SELECT activity.id, MAX(activity.timestamp) FROM activity
+          IN(SELECT activity.id, MAX(activity.timestamp) FROM activity
             GROUP BY activity.id
           )
           ORDER BY activity.timestamp DESC 
@@ -80,6 +116,26 @@ object Dao {
       ).as( str("filename") ~ int("count") ~ date("timestamp") map(flatten) *)
       res.map(Activity.tupled)
   }
+  
+  def getActivityDetailsByName(name: String)(implicit connection: Connection): List[Activity] = {
+            val res = SQL(
+        """
+          SELECT DISTINCT filename, count, timestamp FROM activity
+          WHERE
+            (filename, timestamp) 
+          IN(
+            SELECT filename, MAX(timestamp) FROM activity
+            GROUP BY filename
+          )
+          AND id = (SELECT id FROM voicebank WHERE name = {name})
+          ORDER BY count DESC
+        """
+      ).on(
+        'name -> name
+      ).as( str("filename") ~ int("count") ~ date("timestamp") map(flatten) *)
+      res.map(Activity.tupled)
+  }
+  
   /**
    * 音源をvoicebankに登録する。
    */

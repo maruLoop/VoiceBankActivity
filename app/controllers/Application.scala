@@ -10,6 +10,7 @@ import play.api.mvc._
 import utils.Validator._
 import java.net.URLDecoder
 import domain._
+import domain.entity._
 import domain.JsonFormat._
 import domain.count.PlayCounter
 import java.nio.charset.StandardCharsets
@@ -49,17 +50,20 @@ class Application extends Controller{
     Ok(views.html.voicebank("VoiceBank Activity", "VOICE BANK", id))
   }
   
-  def getAllVoicebanks = Action {
-    val voicebanks: List[Voicebank] = GetActivity.getAllVoicebanks
+  def getVoicebanks(name: String, page: Int, pageSize: Int, sortCode: String, orderCode: String) = Action {
+    val sort: Sort = Sort.resolve(sortCode)
+    val order: Order = Order.resolve(orderCode)
+    val voicebanks: Voicebanks = Voicebanks(GetActivity.getVoicebanksCount, GetActivity.getVoicebanks(name,page,pageSize,sort,order))
+
     Ok(Json.toJson(
-        voicebanks.map{vb => JsonVoicebankFormat(vb.id, vb.name, df.format(vb.timestamp))}
+        JsonVoicebanksFormat(page, voicebanks.voicebanksCount, voicebanks.voicebanks.map{vb => JsonVoicebankFormat(vb.id, vb.name, df.format(vb.registTime), df.format(vb.updateTime))})
     ))
   }
   
   def getNewcomers = Action {
-    val voicebanks: List[Voicebank] = GetActivity.getNewcomers
+    val voicebanks: List[Voicebank] = GetActivity.getVoicebanks("", 0, 10, Sort.UPDATE_TIME, Order.DESC)
     Ok(Json.toJson(
-        voicebanks.map{vb => JsonVoicebankFormat(vb.id, vb.name, df.format(vb.timestamp))}
+        voicebanks.map{vb => JsonVoicebankFormat(vb.id, vb.name, df.format(vb.registTime), df.format(vb.updateTime))}
     ))
   }
   
@@ -76,6 +80,17 @@ class Application extends Controller{
         JsonVoicebankActivityFormat(
             id,
             GetActivity.getName(id),
+            activities.map{ac => JsonActivityFormat(ac.filename, ac.count, df.format(ac.timestamp))}
+        )
+    ))
+  }
+  def voicebankJsonByName(name: String) = Action {
+    val nameUtf8 = URLDecoder.decode(name,"UTF-8")
+    val activities: List[Activity] = GetActivity.getDetailActivityByName(nameUtf8)
+    Ok(Json.toJson(
+        JsonVoicebankActivityFormat(
+            GetActivity.getId(nameUtf8),
+            nameUtf8,
             activities.map{ac => JsonActivityFormat(ac.filename, ac.count, df.format(ac.timestamp))}
         )
     ))

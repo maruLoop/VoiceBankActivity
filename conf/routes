@@ -9,9 +9,10 @@ GET     /voicebanks                 controllers.Application.voicebanks
 GET     /voicebank/:id              controllers.Application.voicebank(id: Int)
 
 POST    /playCount                  controllers.Application.playCount
-GET     /json/getAllVoicebanks      controllers.Application.getAllVoicebanks
+GET     /json/getAllVoicebanks      controllers.Application.getVoicebanks(name: String ?= "", page: Int ?= 0, pageSize: Int ?= 20, sortCode: String ?= "updateTime", orderCode: String ?= "desc")
 GET     /json/getNewcomers          controllers.Application.getNewcomers
 GET     /json/recentActivity        controllers.Application.recentActivity
+GET     /json/voicebank/            controllers.Application.voicebankJsonByName(name: String)
 GET     /json/voicebank/:id         controllers.Application.voicebankJson(id: Int)
 
 # Map static resources from the /public folder to the /assets URL path
