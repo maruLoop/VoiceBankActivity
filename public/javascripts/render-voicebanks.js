@@ -16,6 +16,8 @@ $(function () {
     $sortOrder.on('change', function(){
     	showVoicebanks(0);
     });
+    
+    history.pushState("","","/voicebanks");
 });
 
 var renderVoicebanks = function(values){
@@ -52,8 +54,7 @@ var showVoicebanks = function(pageNum){
 			            $('#voicebanks').html($("img").attr("src","../images/ajax-loader.gif"));
 		            }
 	}).done(function(data){
-		var values = data;		
-		renderVoicebanks(values);
+		renderVoicebanks(data);
 		
 	    if(page != values.pageNow){
 		    history.pushState("","","/voicebanks?page="+values.pageNow);
