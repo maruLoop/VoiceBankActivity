@@ -43,7 +43,7 @@ class Application extends Controller{
    * show VOICE BANKS page
    */
   def voicebanks(page: Int) = Action {
-    Ok(views.html.voicebanks("VoiceBank Activity", "VOICE BANKS", "CHECK the ACTIVITIES"))
+    Ok(views.html.voicebanks("VoiceBank Activity", "VOICE BANKS", "CHECK the ACTIVITIES", page))
   }
     
   def voicebank(id: Int) = Action {
