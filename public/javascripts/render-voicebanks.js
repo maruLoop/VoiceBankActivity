@@ -4,7 +4,6 @@ $(function () {
     });
     
     renderVoicebanks(json);
-    history.pushState("","","/voicebanks");
 });
 
 var renderVoicebanks = function(values){
