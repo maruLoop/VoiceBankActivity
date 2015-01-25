@@ -40,11 +40,10 @@ var showVoicebanks = function(pageNum){
 		template = Handlebars.compile($('#all-voicebanks-tmpl').html());
 	    $('#voicebanks').html(template(values));
 	    
-	    console.log(page + "  " + values.pageNow);
-	    if(page != data.pageNow){
-		    history.pushState("","","/voicebanks?page="+page);
+	    if(page != values.pageNow){
+		    history.pushState("","","/voicebanks?page="+values.pageNow);
+			page = values.pageNow; // Global
 	    }
-		page = data.pageNow; // Global
 	}).fail(function(e){
 	    console.log('error!!!');
 	    console.log(e);
