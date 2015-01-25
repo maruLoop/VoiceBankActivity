@@ -3,21 +3,7 @@ $(function () {
         'selectedText': 'cat'
     });
     
-    renderVoicebanks(json);
-    
-    $('.page-button').on('click', function(){
-    	showVoicebanks($(this).data('page'));
-    });
-    
-    $pageSize.on('change', function(){
-    	showVoicebanks(0);
-    });
-    
-    $sortOrder.on('change', function(){
-    	showVoicebanks(0);
-    });
-    
-    history.pushState("","","/voicebanks");
+    showVoicebanks(page);
 });
 
 var renderVoicebanks = function(values){
@@ -56,10 +42,8 @@ var showVoicebanks = function(pageNum){
 	}).done(function(data){
 		renderVoicebanks(data);
 		
-	    if(page != data.pageNow){
-		    history.pushState("","","/voicebanks?page="+data.pageNow);
-			page = data.pageNow; // Global
-	    }
+		history.pushState("","","/voicebanks?page="+data.pageNow);
+		page = data.pageNow; // Global
 	}).fail(function(e){
 	    console.log('error!!!');
 	    console.log(e);
