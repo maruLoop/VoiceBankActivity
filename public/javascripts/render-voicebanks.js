@@ -3,7 +3,8 @@ $(function () {
         'selectedText': 'cat'
     });
     
-    renderVoicebanks(json);    
+    renderVoicebanks(json);
+    history.pushState("","","/voicebanks");
 });
 
 var renderVoicebanks = function(values){
