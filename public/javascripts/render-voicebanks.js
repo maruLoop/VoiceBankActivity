@@ -6,11 +6,11 @@ $(function () {
     showVoicebanks(page);    
 });
 
-var showVoicebanks = function(page){
+var showVoicebanks = function(pageNum){
 	$.ajax({
 	    url: "/json/getAllVoicebanks",
 	    data: {
-	    	page: page,
+	    	page: pageNum,
 	    	pageSize: $pageSize.val(),
 	    	sortCode: $sortOrder.find(':selected').data('sort'),
 	    	orderCode: $sortOrder.find(':selected').data('order')
