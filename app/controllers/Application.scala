@@ -61,7 +61,7 @@ class Application extends Controller{
   }
   
   def getNewcomers = Action {
-    val voicebanks: List[Voicebank] = GetActivity.getVoicebanks("", 0, 10, Sort.UPDATE_TIME, Order.DESC)
+    val voicebanks: List[Voicebank] = GetActivity.getVoicebanks("", 0, 10, Sort.REGIST_TIME, Order.DESC)
     Ok(Json.toJson(
         voicebanks.map{vb => JsonVoicebankFormat(vb.id, vb.name, df.format(vb.registTime), df.format(vb.updateTime))}
     ))
