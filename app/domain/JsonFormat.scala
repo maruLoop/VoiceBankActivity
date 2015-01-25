@@ -16,32 +16,32 @@ case class JsonVoicebankActivityFormat(id: Int, name: String, activities: List[J
 case class JsonRecentActivityFormat(id: Int, name: String, timestamp: String)
 
 object JsonFormat {
-implicit lazy val jsonVoicebanksFormat: OFormat[JsonVoicebanksFormat] = (
+implicit lazy val jsonVoicebanksFormat: Format[JsonVoicebanksFormat] = (
     (__ \ "pageNow").format[Int] and
     (__ \ "voicebanksCount").format[Int] and
     (__ \ "voicebanks").format[List[JsonVoicebankFormat]]
   )(JsonVoicebanksFormat.apply, unlift(JsonVoicebanksFormat.unapply))
   
-implicit lazy val jsonVoicebankFormat: OFormat[JsonVoicebankFormat] = (
+implicit lazy val jsonVoicebankFormat: Format[JsonVoicebankFormat] = (
     (__ \ "id").format[Int] and
     (__ \ "name").format[String] and
     (__ \ "registTime").format[String] and
     (__ \ "updateTime").format[String]
   )(JsonVoicebankFormat.apply, unlift(JsonVoicebankFormat.unapply))
   
-implicit lazy val jsonActivityFormat: OFormat[JsonActivityFormat] = (
+implicit lazy val jsonActivityFormat: Format[JsonActivityFormat] = (
     (__ \ "filename").format[String] and
     (__ \ "count").format[Int] and
     (__ \ "timestamp").format[String]
   )(JsonActivityFormat.apply, unlift(JsonActivityFormat.unapply))
   
-implicit lazy val jsonVoicebankActivityFormat: OFormat[JsonVoicebankActivityFormat] = (
+implicit lazy val jsonVoicebankActivityFormat: Format[JsonVoicebankActivityFormat] = (
     (__ \ "id").format[Int] and
     (__ \ "name").format[String] and
     (__ \ "activities").format[List[JsonActivityFormat]]
   )(JsonVoicebankActivityFormat.apply, unlift(JsonVoicebankActivityFormat.unapply))
   
-implicit lazy val jsonRecentActivityFormat: OFormat[JsonRecentActivityFormat] = (
+implicit lazy val jsonRecentActivityFormat: Format[JsonRecentActivityFormat] = (
     (__ \ "id").format[Int] and
     (__ \ "name").format[String] and
     (__ \ "timestamp").format[String]

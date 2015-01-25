@@ -43,7 +43,11 @@ class Application extends Controller{
    * show VOICE BANKS page
    */
   def voicebanks(page: Int) = Action {
-    Ok(views.html.voicebanks("VoiceBank Activity", "VOICE BANKS", "CHECK the ACTIVITIES", page))
+    val voicebanks: Voicebanks = Voicebanks(GetActivity.getVoicebanksCount, GetActivity.getVoicebanks("", 0, 20, Sort.UPDATE_TIME, Order.DESC))
+    val json: String = Json.stringify(Json.toJson(
+        JsonVoicebanksFormat(page, voicebanks.voicebanksCount, voicebanks.voicebanks.map{vb => JsonVoicebankFormat(vb.id, vb.name, df.format(vb.registTime), df.format(vb.updateTime))})
+    ))
+    Ok(views.html.voicebanks("VoiceBank Activity", "VOICE BANKS", "CHECK the ACTIVITIES", page, json))
   }
     
   def voicebank(id: Int) = Action {

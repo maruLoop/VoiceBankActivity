@@ -1,4 +1,4 @@
-@(title: String, pageName: String, message: String, page: Int)
+@(title: String, pageName: String, message: String, page: Int, json: String)
 
 @base(title, pageName) {
 
@@ -38,6 +38,7 @@
 	</div><!-- container -->
 	
 }{
+
 	<script id="all-voicebanks-tmpl" type="text/x-handlebars-template">
 	<div>
 	    <p class="text-right">登録件数: {{voicebanksCount}}件</p>
@@ -64,6 +65,7 @@
 	</script>
 	
     <script>
+        var json = $.parseJSON("@json".replace(/&quot;/ig, "\""));
     	var page = @page;
     	var $pageSize = $("#pageSizeSelector");
     	var $sortOrder = $("#sortSelector");

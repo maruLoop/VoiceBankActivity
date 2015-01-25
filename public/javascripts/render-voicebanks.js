@@ -3,8 +3,29 @@ $(function () {
         'selectedText': 'cat'
     });
     
-    showVoicebanks(page);    
+    renderVoicebanks(json);    
 });
+
+var renderVoicebanks = function(values){
+	var pagesCount = Math.ceil(values.voicebanksCount / $pageSize.val());
+	var pagesCountArray = new Array();
+	for(var i=0; i<pagesCount; i++){
+		pagesCountArray[i] = {page:i};
+		if(values.pageNow == i){
+			pagesCountArray[i].active = true;
+		}
+	}
+	values.pagesCount = pagesCountArray;
+	if(values.pageNow-1>=0){
+		values.prev = { exist: true, page: values.pageNow-1 };
+	}
+	if(values.pageNow+1<pagesCount){
+		values.next ={ exist: true, page: values.pageNow+1 }; 
+	}
+	
+	template = Handlebars.compile($('#all-voicebanks-tmpl').html());
+    $('#voicebanks').html(template(values));
+}
 
 var showVoicebanks = function(pageNum){
 	$.ajax({
@@ -19,27 +40,9 @@ var showVoicebanks = function(pageNum){
 			            $('#voicebanks').html($("img").attr("src","../images/ajax-loader.gif"));
 		            }
 	}).done(function(data){
-		var values = data;
+		var values = data;		
+		renderVoicebanks(values);
 		
-		var pagesCount = Math.ceil(values.voicebanksCount / $pageSize.val());
-		var pagesCountArray = new Array();
-		for(var i=0; i<pagesCount; i++){
-			pagesCountArray[i] = {page:i};
-			if(values.pageNow == i){
-				pagesCountArray[i].active = true;
-			}
-		}
-		values.pagesCount = pagesCountArray;
-		if(values.pageNow-1>=0){
-			values.prev = { exist: true, page: values.pageNow-1 };
-		}
-		if(values.pageNow+1<pagesCount){
-			values.next ={ exist: true, page: values.pageNow+1 }; 
-		}
-		
-		template = Handlebars.compile($('#all-voicebanks-tmpl').html());
-	    $('#voicebanks').html(template(values));
-	    
 	    if(page != values.pageNow){
 		    history.pushState("","","/voicebanks?page="+values.pageNow);
 			page = values.pageNow; // Global
