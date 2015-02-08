@@ -25,20 +25,32 @@ object GetActivity {
     DB.withConnection (implicit connection  => {
       Dao.getVoicebanksCount
     })
+  def getFilenameCount(id: Int): Int =
+    DB.withConnection (implicit connection  => {
+      Dao.getFilenameCount(id)
+    })
+  def getFilenameCountByName(name: String): Int =
+    DB.withConnection (implicit connection  => {
+      Dao.getFilenameCountByName(name)
+    })
   
   def getRecentActivity: List[RecentActivity] = 
     DB.withConnection (implicit connection  => {
       getRecentActivityWithLimit(10)
     })
   
-  def getDetailActivity(id: Int): List[Activity] = 
+  def getDetailActivity(id: Int, page: Int, pageSize: Int, sort: ActivitySort, order:Order): List[Activity] = 
     DB.withConnection (implicit connection  => {
-      getActivityDetails(id)
+      val offset: Int = pageSize * page
+      val limit: Int = pageSize
+      Dao.getActivityDetails(id, limit, offset, sort, order)
     })
     
-  def getDetailActivityByName(name: String): List[Activity] = 
+  def getDetailActivityByName(name: String, page: Int, pageSize: Int, sort: ActivitySort, order: Order): List[Activity] = 
     DB.withConnection (implicit connection  => {
-      Dao.getActivityDetailsByName(name)
+      val offset: Int = pageSize * page
+      val limit: Int = pageSize
+      Dao.getActivityDetailsByName(name, limit, offset, sort, order)
     })
   
   def getVoicebanks(name: String, page: Int, pageSize: Int, sort: Sort, order: Order): List[Voicebank] =

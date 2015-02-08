@@ -55,6 +55,28 @@ object Dao {
       ).as( scalar[Int].single )
   }
   
+  def getFilenameCount(id: Int)(implicit connection: Connection): Int = {
+        SQL(
+        """
+          SELECT COUNT(filename) FROM activity
+          WHERE id = {id}
+        """
+      ).on(
+          'id -> id
+      ).as( scalar[Int].single )
+  }
+  
+  def getFilenameCountByName(name: String)(implicit connection: Connection): Int = {
+        SQL(
+        """
+          SELECT COUNT(filename) FROM activity
+          WHERE id = (SELECT id FROM voicebank WHERE name = {name})
+        """
+      ).on(
+          'name -> name
+      ).as( scalar[Int].single )
+  }
+  
   def getVoicebanksWithLimit(name: String, limit: Int, offset: Int, sort: Sort, order: Order)(implicit connection: Connection):List[Voicebank] = {
     val sortForColmun: String = convertSortToTableCulmun(sort)
             val res = SQL(
@@ -98,7 +120,15 @@ object Dao {
       res.map(RecentActivity.tupled)
   }
   
-  def getActivityDetails(id: Int)(implicit connection: Connection): List[Activity] = {
+  private def convertActivitySortToTableCulmun(sort: ActivitySort): String = {
+    sort match{
+      case ActivitySort.PLAY_COUNT => "count"
+      case ActivitySort.UPDATE_TIME => "timestamp"
+    }
+  }
+  
+  def getActivityDetails(id: Int, limit: Int, offset: Int, sort: ActivitySort, order: Order)(implicit connection: Connection): List[Activity] = {
+    val sortForColmun: String = convertActivitySortToTableCulmun(sort)
             val res = SQL(
         """
           SELECT DISTINCT filename, count, timestamp FROM activity
@@ -109,15 +139,18 @@ object Dao {
             GROUP BY filename
           )
           AND id = {id}
-          ORDER BY count DESC
-        """
+          ORDER BY %s %s LIMIT {limit} OFFSET {offset}
+        """.format(sortForColmun, order.toString())
       ).on(
-        'id -> id
+        'id -> id,
+        'limit -> limit,
+        'offset -> offset
       ).as( str("filename") ~ int("count") ~ date("timestamp") map(flatten) *)
       res.map(Activity.tupled)
   }
   
-  def getActivityDetailsByName(name: String)(implicit connection: Connection): List[Activity] = {
+  def getActivityDetailsByName(name: String, limit: Int, offset: Int, sort: ActivitySort, order: Order)(implicit connection: Connection): List[Activity] = {
+    val sortForColmun: String = convertActivitySortToTableCulmun(sort)
             val res = SQL(
         """
           SELECT DISTINCT filename, count, timestamp FROM activity
@@ -128,10 +161,12 @@ object Dao {
             GROUP BY filename
           )
           AND id = (SELECT id FROM voicebank WHERE name = {name})
-          ORDER BY count DESC
-        """
+          ORDER BY %s %s LIMIT {limit} OFFSET {offset}
+        """.format(sortForColmun, order.toString())
       ).on(
-        'name -> name
+        'name -> name,
+        'limit -> limit,
+        'offset -> offset
       ).as( str("filename") ~ int("count") ~ date("timestamp") map(flatten) *)
       res.map(Activity.tupled)
   }

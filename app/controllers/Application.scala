@@ -16,14 +16,15 @@ import domain.count.PlayCounter
 import java.nio.charset.StandardCharsets
 import domain.count.GetActivity
 import java.util.Date
+import java.util.TimeZone
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 object Application extends Application
 
 class Application extends Controller{
-
-    val df: DateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+  val dfString: String = "yyyy-MM-dd HH:mm:ss"
+  val df: DateFormat = new SimpleDateFormat(dfString)
     
   /**
    * show HOME page
@@ -50,8 +51,8 @@ class Application extends Controller{
     Ok(views.html.voicebanks("VoiceBank Activity", "VOICE BANKS", "CHECK the ACTIVITIES", page, json))
   }
     
-  def voicebank(id: Int) = Action {
-    Ok(views.html.voicebank("VoiceBank Activity", "VOICE BANK", id))
+  def voicebank(id: Int, page: Int) = Action {
+    Ok(views.html.voicebank("VoiceBank Activity", "VOICE BANK", id, page))
   }
   
   def getVoicebanks(name: String, page: Int, pageSize: Int, sortCode: String, orderCode: String) = Action {
@@ -78,24 +79,42 @@ class Application extends Controller{
     ))
   }
   
-  def voicebankJson(id: Int) = Action {
-    val activities: List[Activity] = GetActivity.getDetailActivity(id)
+  def voicebankJson(id: Int, page: Int, pageSize: Int, sortCode: String, orderCode: String, timeZone: String) = Action {
+    val sort: ActivitySort = ActivitySort.resolve(sortCode)
+    val order: Order = Order.resolve(orderCode)
+    
+    val tz: TimeZone = TimeZone.getTimeZone(timeZone)
+    val sdf: SimpleDateFormat = new SimpleDateFormat(dfString)
+    sdf.setTimeZone(tz)
+    
+    val activities: List[Activity] = GetActivity.getDetailActivity(id, page, pageSize, sort, order)
     Ok(Json.toJson(
         JsonVoicebankActivityFormat(
+            page,
             id,
             GetActivity.getName(id),
-            activities.map{ac => JsonActivityFormat(ac.filename, ac.count, df.format(ac.timestamp))}
+            GetActivity.getFilenameCount(id),
+            activities.map{ac => JsonActivityFormat(ac.filename, ac.count, sdf.format(ac.timestamp))}
         )
     ))
   }
-  def voicebankJsonByName(name: String) = Action {
+  def voicebankJsonByName(name: String, page: Int, pageSize: Int, sortCode: String, orderCode: String, timeZone: String) = Action {
     val nameUtf8 = URLDecoder.decode(name,"UTF-8")
-    val activities: List[Activity] = GetActivity.getDetailActivityByName(nameUtf8)
+    val sort: ActivitySort = ActivitySort.resolve(sortCode)
+    val order: Order = Order.resolve(orderCode)
+    
+    val tz: TimeZone = TimeZone.getTimeZone(timeZone)
+    val sdf: SimpleDateFormat = new SimpleDateFormat(dfString)
+    sdf.setTimeZone(tz)
+    
+    val activities: List[Activity] = GetActivity.getDetailActivityByName(nameUtf8, page, pageSize, sort, order)
     Ok(Json.toJson(
         JsonVoicebankActivityFormat(
+            page,
             GetActivity.getId(nameUtf8),
             nameUtf8,
-            activities.map{ac => JsonActivityFormat(ac.filename, ac.count, df.format(ac.timestamp))}
+            GetActivity.getFilenameCountByName(nameUtf8),
+            activities.map{ac => JsonActivityFormat(ac.filename, ac.count, sdf.format(ac.timestamp))}
         )
     ))
   }

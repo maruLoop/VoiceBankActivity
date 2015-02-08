@@ -6,14 +6,14 @@
 GET     /                           controllers.Application.index
 GET     /about                      controllers.Application.about
 GET     /voicebanks                 controllers.Application.voicebanks(page: Int ?= 0)
-GET     /voicebank/:id              controllers.Application.voicebank(id: Int)
+GET     /voicebank/:id              controllers.Application.voicebank(id: Int, page: Int ?= 0)
 
 POST    /playCount                  controllers.Application.playCount
 GET     /json/getAllVoicebanks      controllers.Application.getVoicebanks(name: String ?= "", page: Int ?= 0, pageSize: Int ?= 20, sortCode: String ?= "updateTime", orderCode: String ?= "desc")
 GET     /json/getNewcomers          controllers.Application.getNewcomers
 GET     /json/recentActivity        controllers.Application.recentActivity
-GET     /json/voicebank/            controllers.Application.voicebankJsonByName(name: String)
-GET     /json/voicebank/:id         controllers.Application.voicebankJson(id: Int)
+GET     /json/voicebank/            controllers.Application.voicebankJsonByName(name: String, page: Int ?= 0, pageSize: Int ?= 40, sortCode: String ?= "playCount", orderCode: String ?= "desc", timeZone: String ?= "JST")
+GET     /json/voicebank/:id         controllers.Application.voicebankJson(id: Int, page: Int ?= 0, pageSize: Int ?= 40, sortCode: String ?= "playCount", orderCode: String ?= "desc", timeZone: String ?= "JST")
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -11,7 +11,7 @@ case class JsonVoicebanksFormat(pageNow: Int, voicebanksCount: Int, voicebanks: 
 
 case class JsonActivityFormat(filename: String, count: Int, timestamp: String)
 
-case class JsonVoicebankActivityFormat(id: Int, name: String, activities: List[JsonActivityFormat])
+case class JsonVoicebankActivityFormat(pageNow: Int, id: Int, name: String, voiceCount: Int, activities: List[JsonActivityFormat])
 
 case class JsonRecentActivityFormat(id: Int, name: String, timestamp: String)
 
@@ -36,8 +36,10 @@ implicit lazy val jsonActivityFormat: Format[JsonActivityFormat] = (
   )(JsonActivityFormat.apply, unlift(JsonActivityFormat.unapply))
   
 implicit lazy val jsonVoicebankActivityFormat: Format[JsonVoicebankActivityFormat] = (
+    (__ \ "pageNow").format[Int] and
     (__ \ "id").format[Int] and
     (__ \ "name").format[String] and
+    (__ \ "voiceCount").format[Int] and
     (__ \ "activities").format[List[JsonActivityFormat]]
   )(JsonVoicebankActivityFormat.apply, unlift(JsonVoicebankActivityFormat.unapply))
   
