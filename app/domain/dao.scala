@@ -159,7 +159,7 @@ object Dao {
             (filename, timestamp) 
           IN(
             SELECT filename, MAX(timestamp) FROM activity
-            WHERE id = {id}
+            WHERE id = (SELECT id FROM voicebank WHERE name = {name})
             GROUP BY filename
           )
           AND id = (SELECT id FROM voicebank WHERE name = {name})
