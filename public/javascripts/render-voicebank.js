@@ -8,8 +8,9 @@ $(function () {
       page = state;
       showVoicebanksWithoutPushState(state);
     });
-    
-    history.replaceState(0);
+
+    history.replaceState(0, null);
+//    history.replaceState(0);
     showVoicebanks(page);
 });
 
